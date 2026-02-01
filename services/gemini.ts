@@ -3,8 +3,9 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { SYSTEM_PROMPT } from "../constants";
 import { AIResponse } from "../types";
 
-// Always use the process.env.API_KEY directly for initialization.
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Vite 환경변수 사용 (VITE_ 접두사 필요)
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
+const ai = new GoogleGenAI({ apiKey });
 
 export const analyzeBrainDump = async (userInput: string): Promise<AIResponse> => {
   // Use ai.models.generateContent to query GenAI with both the model name and prompt.
