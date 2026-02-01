@@ -3,11 +3,24 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { SYSTEM_PROMPT } from "../constants";
 import { AIResponse } from "../types";
 
-// Vite 환경변수 사용 (VITE_ 접두사 필요)
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
-const ai = new GoogleGenAI({ apiKey });
+// Gemini AI 인스턴스를 지연 초기화 (lazy initialization)
+let aiInstance: GoogleGenAI | null = null;
+
+// API 호출 시에만 인스턴스 생성
+const getAIInstance = (): GoogleGenAI => {
+  if (!aiInstance) {
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    if (!apiKey) {
+      throw new Error("Gemini API 키가 설정되지 않았습니다. 환경 변수 VITE_GEMINI_API_KEY를 확인해주세요.");
+    }
+    aiInstance = new GoogleGenAI({ apiKey });
+  }
+  return aiInstance;
+};
 
 export const analyzeBrainDump = async (userInput: string): Promise<AIResponse> => {
+  const ai = getAIInstance();
+  
   // Use ai.models.generateContent to query GenAI with both the model name and prompt.
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
