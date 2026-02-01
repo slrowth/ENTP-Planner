@@ -1,0 +1,7 @@
+{
+  "name": "Copy of ENTP Flow",
+  "description": "An AI-powered scheduler designed for the ENTP personality. Dump your ideas freely, and let Gemini structure your life with wit and reality checks.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
